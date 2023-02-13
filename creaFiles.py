@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from osgeo import gdal
 from osgeo.gdalconst import *
 import numpy as np
@@ -163,7 +164,7 @@ def findcols(dem1,dematpoi,row0,col0,xsize,demOut,vout=-1000):
     colmin=col
     return colmin,colmax,demOut
 
-def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,simple=False):
+def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,simple=2):
     print('Opening dem:',fnameDEM)
     cell,proj=readGDAL(fnameDEM,True)
     dem,nodata,xsize,ysize,geoT=readGDAL(fnameDEM)
@@ -246,8 +247,8 @@ def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,simple
     for cou in rect:
         dem[cou[0],cou[1]]=dematpoi-dematdown
         lake[cou[0],cou[1]]=0.0
-    CreateGeoTiff(fnameOut+'.grd',dem,xsize,ysize,geoT,-99999,'GSBG')
-    CreateGeoTiff(fnameOutLake+'.grd',lake,xsize,ysize,geoT,-99999,'GSBG')
+    CreateGeoTiff(fnameOut,dem,xsize,ysize,geoT,-99999,'GSBG')
+    CreateGeoTiff(fnameOutLake,lake,xsize,ysize,geoT,-99999,'GSBG')
     #CreateGeoTiff(fnameOut+'.tif',dem,xsize,ysize,geoT,-99999,'GTiff')
     #CreateGeoTiff(fnameOutLake+'.tif',lake,xsize,ysize,geoT,-99999,'GTiff')
 
@@ -263,37 +264,73 @@ def checkAround(dem,r,c,xs,ys,vin):
             return False
     #print(r,c,True)
     return True
+
+if __name__ == "__main__":
+  #  call example:
+  #    creaFiles.py [-s srtm.tif] -w  0.3 -lp 36.32  36.19 -dp 36.12 37.42 [-od outDem.grd]  [-ol outLake.grd ]
+    
+    import sys
+    args=sys.argv
+    fnameDem='srtm.tif'
+    fnameOut='outDem.grd'
+    fnameOutLake='outLake.grd'
+    sizeKM=None
+    LakePoint=[]
+    dire=''
+    DownDamPoint=[]
+    
+    for j in range(len(args)):
+        arg=args[j]
+        if arg=='-s':
+            fnameDem=args[j+1]
+        elif arg=='-w':
+            sizeKM=float(args[j+1])
+        elif arg=='-od':
+            fnameOut=args[j+1]
+        elif arg=='-ol':
+            fnameOutLake=args[j+1]
+        elif arg=='-lp':
+            LakePoint=[float(args[j+1]),float(args[j+2])]
+        elif arg=='-dp':
+            DownDamPoint=[float(args[j+1]),float(args[j+2])]
+        elif arg=='-d':
+            dire=args[j+1]
+                    
+    if dire !='':
+        fnameDem=dire+os.sep+fnameDem
+        fnameOut=dire+os.sep+fnameOut
+        fnameOutLake=dire+os.sep+fnameOutLake
+    if sizeKM==None or LakePoint==[] or DownDamPoint==[]:
+        print('Error in input data' )
+        if sizeKM==None:print('sizeKM not defined , -s xxx')
+        if LakePoint==[]:print('LkePoint not defined, -lp  x y')
+        if DownDamPoint==[]:print('DownDamPoint not defined, -dp  x y')
+        print('syntax: creaFiles.py [-s srtm.tif] -w  0.3 -lp 36.32  36.19 -dp 36.12 37.42 [-od outDem.grd]  [-ol outLake.grd ]')
+        quit()
+    if not os.path.exists(fnameDem):
+        print('Dem file not existing:',fnameDem)
+        quit()
+    print('*************************************************')
+    print('*   Preparation of file for NAMIDANCE DB calc')
+    print('*************************************************')
+    print('srtm file     =',fnameDem)
+    print('Lake Point    =',LakePoint)
+    print('Down dam Point=',DownDamPoint)
+    print('output DEM    =',fnameOut)
+    print('output Lake   =',fnameOutLake)
+    
+    creaLake(fnameDem,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,2) 
+    
+    quit()
         
         
 #Yarseli dam
-dire='./Turkey EQ/Yarseli Dam/case60m/'
-LakePoint=[36.327959,  36.193402]  #dam lake
-#LakePoint=[ 36.321174 , 36.19380]
-#DownDamPoint=[36.327959,  36.195398] 
-DownDamPoint=[ 36.325398,  36.196431]
-sizeKM=0.06
-fnameDEM=dire+'srtm.tif'
-fnameOut=dire +'outDem'
-fnameOutLake=dire +'outLake' 
-creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,2) 
+# python ./creaFiles.py   -s ./Turkey\ EQ/Yarseli\ Dam/case60m/srtm.tif  -lp 36.327959 36.193402 -dp 36.325398  36.196431 -w 0.06  -od ./Turkey\ EQ/Yarseli\ Dam/case60m/outDem.grd -ol ./Turkey\ EQ/Yarseli\ Dam/case60m/outLake.grd
 
 #Ataturk dam
-dire='./Turkey EQ/Ataturk/'
-LakePoint   =[ 38.322537,  37.483541]  #dam lake
-DownDamPoint=[ 38.314282 , 37.480067] 
-sizeKM=0.3
-fnameDEM=dire+'srtm.tif'
-fnameOut=dire +'outDem'
-fnameOutLake=dire +'outLake' 
-#creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,2) 
+# python ./creaFiles.py  -d ./Turkey\ EQ/Ataturk -s srtm.tif  -lp 38.322537  37.483541 -dp 38.314282 37.480067 -w 0.06  -od outDem.grd -ol outLake.grd
 
 
 #Sultansuyu Dam
-dire='./Turkey EQ/Sultansuyu Dam/'
-LakePoint=[  38.050799, 38.318292]  #dam lake
-DownDamPoint=[  38.052277,  38.321512] 
-sizeKM=0.3
-fnameDEM=dire+'srtm.tif'
-fnameOut=dire +'outDem'
-fnameOutLake=dire +'outLake' 
-#creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake)
+# python ./creaFiles.py   -s ./Turkey\ EQ/Sultansuyu\ Dam/srtm.tif  -lp 38.050799 38.318292 -dp 38.052277  38.321512 -w 0.3  -od ./Turkey\ EQ/Sultansuyu\ Dam/outDem.grd -ol ./Turkey\ EQ/Sultansuyu\ Dam/outLake.grd
+# 
