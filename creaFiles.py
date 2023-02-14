@@ -1,10 +1,13 @@
-#!/usr/bin/python3
+import numpy as np
 from osgeo import gdal
 from osgeo.gdalconst import *
-import numpy as np
+
 import struct
 import os,math
 
+around=[(-1,-1),(-1,0),(-1,1),
+        (0,-1) ,        (0,+1),
+        (+1,-1),(+1,0),(+1,+1)]
 def dprint(a,b='',c='',d='',e='',f='',g='',h='',i=''):
     debug=False
     debug=True
@@ -164,7 +167,7 @@ def findcols(dem1,dematpoi,row0,col0,xsize,demOut,vout=-1000):
     colmin=col
     return colmin,colmax,demOut
 
-def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,simple=2):
+def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHeight='',simple=2):
     print('Opening dem:',fnameDEM)
     cell,proj=readGDAL(fnameDEM,True)
     dem,nodata,xsize,ysize,geoT=readGDAL(fnameDEM)
@@ -172,11 +175,14 @@ def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,simple
     dem1=np.reshape(dem,[ysize,xsize])
     row0,col0=getRowCol(LakePoint,xsize,ysize,geoT)
     print('row col of lake',row0,col0)
-    dematpoi=dem1[row0,col0]
+    if LakeHeight=='':
+        dematpoi=dem1[row0,col0]
+    else:
+        dematpoi=LakeHeight
     row1,col1=getRowCol(DownDamPoint,xsize,ysize,geoT)
     dematdown=dem1[row1,col1]
     lake=-dematpoi+dem1
-    
+    #demRiver=dem1.copy()
     print('Lake dem=',dematpoi,'   Downdam dem=',dematdown,  '   Jump=',dematpoi-dematdown)
     print(simple,simple==2,simple==True)
     if simple==True:
@@ -235,7 +241,16 @@ def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,simple
                   if checkAround(dem1,row,col2,xsize,ysize,dematpoi):
                      dem2[row,col2]=dematdown
            dem= dematpoi-dem2     
-               
+           #row1,col1=getRowCol(DownDamPoint,xsize,ysize,geoT)
+           #demRiver=lookAround(dem1,demRiver,row1,col1,xsize,ysize,around)
+           #row0,col0=getRowCol(DownDamPoint,xsize,ysize,geoT)  
+           #while row0<ysize and row0>0 and col0>0 and col0<xsize:
+           #    print(row0,col0,row0<ysize and row0>0 and col0>0 and col0<xsize)
+           #    row0,col0=lookMin(dem1,row0,col0,around,demRiver,xsize,ysize)
+           #    if demRiver[row0,col0]==-1000:
+           #        col0 +=1;row0+=1
+           #    else:
+           #         demRiver[row0,col0]=-1000
                        
 # creazione innesco
     vertix,rect=createRect(LakePoint,DownDamPoint,sizeKM,xsize,ysize,geoT)    
@@ -249,6 +264,7 @@ def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,simple
         lake[cou[0],cou[1]]=0.0
     CreateGeoTiff(fnameOut,dem,xsize,ysize,geoT,-99999,'GSBG')
     CreateGeoTiff(fnameOutLake,lake,xsize,ysize,geoT,-99999,'GSBG')
+    #CreateGeoTiff(fnameOutRiver,demRiver,xsize,ysize,geoT,-99999,'GSBG')
     #CreateGeoTiff(fnameOut+'.tif',dem,xsize,ysize,geoT,-99999,'GTiff')
     #CreateGeoTiff(fnameOutLake+'.tif',lake,xsize,ysize,geoT,-99999,'GTiff')
 
@@ -265,20 +281,81 @@ def checkAround(dem,r,c,xs,ys,vin):
     #print(r,c,True)
     return True
 
+#def lookAround(dem,demRiver,row0,col0,xsize,ysize,around):
+#    dmax=col0
+#    if xsize-col0>dmax:dmax=xsize-col0
+#    if row0>dmax: dmax=row0
+#    if ysize-row0>dmax: dmax=ysize-row0              
+    
+#    while row0<ysize and row0>0 and col0>0 and col0<xsize:
+#      dmin,row0,col0,found,demRiver=lookMin(dem[row0,col0],dem,row0,col0,around,demRiver,xsize,ysize)      
+#      if not found:
+#        for delta in range(dmax):
+#            if int(delta/100)*100==delta:
+#                print('delta, dmax=',delta,dmax)
+#            col1=col0-delta
+#            col2=col0+delta
+#            row1=row0-delta
+#            row2=row0+delta
+#            if row2>ysize-1: row2=ysize-1
+#            if row1<0: row1=0
+#            if col2>xsize-1: col2=xsize-1
+#            if col1<0: col1=0
+        
+#            for col in range(col1,col2):
+#                dmin,row0,col0,found,demRiver=lookMin(dmin,dem,row1,col,around,demRiver,xsize,ysize)
+#                if found and demRiver[row0,col0]!=-1000:
+#                    demRiver[row0,col0]=-1000
+#                else:
+#                    dmin,row0,col0,found,demRiver=lookMin(dmin,dem,row2,col,around,demRiver,xsize,ysize)
+#                    if found and demRiver[row0,col0]!=-1000:
+#                        demRiver[row0,col0]=-1000
+#                    else:
+#                        for row in range(row1+1,row2):
+#                            dmin,row0,col0,found,demRiver=lookMin(dmin,dem,row,col1,around,demRiver,xsize,ysize)
+#                            if found and demRiver[row0,col0]!=-1000:
+#                                demRiver[row0,col0]=-1000
+#                            else:
+#                                dmin,row0,col0,found,demRiver=lookMin(dmin,dem,row,col2,around,demRiver,xsize,ysize)
+#                                if found and demRiver[row0,col0]!=-1000:
+#                                    demRiver[row0,col0]=-1000
+#                                else:
+#                                    break
+#            if found:
+#               break
+
+#    return demRiver
+#def lookMin(dmin,dem,r,c,around,demRiver,xsize,ysize):
+#    pmin=[dmin,r,c]
+#    found=False
+#    for cou in around:
+#        if r+cou[0]<ysize and r+cou[0]>0 and c+cou[1]>0 and c+cou[1]<xsize:
+#           if dem[r+cou[0],c+cou[1]]<pmin[0] and demRiver[r+cou[0],c+cou[1]]!=-1000:
+#              pmin=[dem[r+cou[0],c+cou[1]],r+cou[0],c+cou[1]]
+#              found=True
+#           if dem[r+cou[0],c+cou[1]]==pmin[0]:
+#               demRiver[r+cou[0],c+cou[1]]=-2000
+            
+        
+#    return pmin[0],pmin[1],pmin[2],found,demRiver
+
 if __name__ == "__main__":
   #  call example:
-  #    creaFiles.py [-s srtm.tif] -w  0.3 -lp 36.32  36.19 -dp 36.12 37.42 [-od outDem.grd]  [-ol outLake.grd ]
+  #    creaFiles.py [-s srtm.tif] -w  0.3 -lp 36.32  36.19 -dp 36.12 37.42 [-od outDem.grd]  [-ol outLake.grd ]  [-res newcellsize]
     
     import sys
     args=sys.argv
     fnameDem='srtm.tif'
     fnameOut='outDem.grd'
     fnameOutLake='outLake.grd'
+    #fnameOutRiver='outRiver.grd'
     sizeKM=None
     LakePoint=[]
     dire=''
+    newCellSize=''
     DownDamPoint=[]
-    
+    bbox=''
+    LakeHeight=''
     for j in range(len(args)):
         arg=args[j]
         if arg=='-s':
@@ -289,23 +366,32 @@ if __name__ == "__main__":
             fnameOut=args[j+1]
         elif arg=='-ol':
             fnameOutLake=args[j+1]
+        #elif arg=='-r':
+        #    fnameOutRiver=args[j+1]
         elif arg=='-lp':
             LakePoint=[float(args[j+1]),float(args[j+2])]
+        elif arg=='-lh':
+            LakeHeight=float(arg[j+1])
         elif arg=='-dp':
             DownDamPoint=[float(args[j+1]),float(args[j+2])]
         elif arg=='-d':
             dire=args[j+1]
+        elif arg=='-res':
+            newCellSize=float(args[j+1])
+        elif arg=='-bbox':
+            bbox=args[j+1]
                     
     if dire !='':
         fnameDem=dire+os.sep+fnameDem
         fnameOut=dire+os.sep+fnameOut
         fnameOutLake=dire+os.sep+fnameOutLake
+        #fnameOutRiver=dire+os.sep+fnameOutRiver
     if sizeKM==None or LakePoint==[] or DownDamPoint==[]:
         print('Error in input data' )
-        if sizeKM==None:print('sizeKM not defined , -s xxx')
+        if sizeKM==None:print('sizeKM not defined , -w xxx')
         if LakePoint==[]:print('LkePoint not defined, -lp  x y')
         if DownDamPoint==[]:print('DownDamPoint not defined, -dp  x y')
-        print('syntax: creaFiles.py [-s srtm.tif] -w  0.3 -lp 36.32  36.19 -dp 36.12 37.42 [-od outDem.grd]  [-ol outLake.grd ]')
+        print('syntax: creaFiles.py [-s srtm.tif] -w  0.3 -lp 36.32  36.19 -dp 36.12 37.42 [-od outDem.grd]  [-ol outLake.grd ]  [-bbox xmin ymin xmax ymax')
         quit()
     if not os.path.exists(fnameDem):
         print('Dem file not existing:',fnameDem)
@@ -318,14 +404,31 @@ if __name__ == "__main__":
     print('Down dam Point=',DownDamPoint)
     print('output DEM    =',fnameOut)
     print('output Lake   =',fnameOutLake)
-    
-    creaLake(fnameDem,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,2) 
+    #print('output River   =',fnameOutRiver)
+    if newCellSize!='' or bbox!='':
+        if bbox!='':
+	        bb=' -r near -te '+bbox #,str(xmin),str(ymin),str(xmax),str(ymax)])
+        else:
+            bb=' -r bilinear '
+        if newCellSize!='':
+           cs=' -tr '+format(newCellSize)+' '+format(newCellSize)
+        else:
+           cs=''
+        fnameDemNew=dire+'/srtmNew.tif'
+        print('resizing dem '+fnameDem+' to   = '+format(newCellSize)+'  new file='+fnameDemNew +'  to: '+bbox)
+        cmd='gdalwarp '+bb+cs+' '+fnameDem+' '+fnameDemNew
+        print(cmd)
+        os.system(cmd)
+        fnameDem=fnameDemNew
+    creaLake(fnameDem,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHeight,2) 
     
     quit()
-        
-        
+#Cingoli
+#  -d Cingoli -s /data/N43E013.hgt -lp  13.161652  43.382106 -w 0.1 -dp  13.163041  43.384161  -res 0.0001388  -bbox "13.092161  43.343359 13.724455  43.731141"
+#Malpasset dam  
+#python createFiles.py -d ./Malpasset  -s /data/N43E006.hgt -lp  6.757149  43.51236  -dp  6.757074  43.51192  -lh 100 -bbox 6.67  43.34  6.88 43.57   -res 0.0001388
 #Yarseli dam
-# python ./creaFiles.py   -s ./Turkey\ EQ/Yarseli\ Dam/case60m/srtm.tif  -lp 36.327959 36.193402 -dp 36.325398  36.196431 -w 0.06  -od ./Turkey\ EQ/Yarseli\ Dam/case60m/outDem.grd -ol ./Turkey\ EQ/Yarseli\ Dam/case60m/outLake.grd
+# python ./creaFiles.py   -d ./Turkey\ EQ/Yarseli\ Dam/case60m -s srtm.tif  -lp 36.327959 36.193402 -dp 36.325398  36.196431 -w 0.06  -od outDem.grd -ol outLake.grd  
 
 #Ataturk dam
 # python ./creaFiles.py  -d ./Turkey\ EQ/Ataturk -s srtm.tif  -lp 38.322537  37.483541 -dp 38.314282 37.480067 -w 0.06  -od outDem.grd -ol outLake.grd
