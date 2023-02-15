@@ -1,14 +1,15 @@
-# DamBreak
-Dambreak sowftare tools
-
-
+# Dambreak sowftare tools
+## Installation
 Install conda, then create an environment  called gdal
 conda create -n gdal
 conda install gdal
 
+A number of tools are available:
+* [NAMIDANCE files] (#namidance-files-creation)
+* [Arrival Time computation] (#arrival-time-computation)
+* [Extraction of timelines] (#extraction-of-timelines)
 
-
-
+## NAMIDANCE Files creation
 To run use this command:
 creaFiles.py [-d basedir] [-s srtm.tif] -w  0.3 -lp 36.32  36.19 -dp 36.12 37.42 [-od outDem.grd]  [-ol outLake.grd ]  [-bbox xmin ymin xmax ymax] [-res NewCellSize]
 
@@ -25,7 +26,7 @@ where:
 * **-res** <NewCellSize> in degrees
 
 
-Example: El Cajun (Honduras) dam break
+##Example: El Cajun (Honduras) dam break
 ![wholeArea](https://user-images.githubusercontent.com/10267112/218968706-29ab1a9e-53be-4596-b036-70241c9039de.png)
 
 
