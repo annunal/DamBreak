@@ -24,16 +24,13 @@ where:
 -res <NewCellSize>
 
 
-Example: Cingoli dam break
+Example: El Cajun (Honduras) dam break
 ![wholeLake](https://user-images.githubusercontent.com/10267112/218803450-b19dd755-7849-4dbd-8264-bc1da0de5dc0.png)
-The Cingoli dam is located in Italy, Marche region.
 
 Identify the dedicated SRTM files that complse the dem. In case you need more SRTM sections, download them and the combine into ne single srtm.tif file.
 To download you can use:  https://dwtkns.com/srtm30m/
 For this case the specific piece to download is N43E013
-![srtm](https://user-images.githubusercontent.com/10267112/218804699-c395a8e8-d085-41a2-8340-e26355b1bfe5.JPG)
-
-
+![selection_srtm](https://user-images.githubusercontent.com/10267112/218966318-7aab2e1d-c40d-460a-a218-9949566eaf04.JPG)
 
 Then you have to identify the lake point and the down dam point.  
 ![inputPoints](https://user-images.githubusercontent.com/10267112/218804799-ba885bbf-09b8-4e9b-ab7a-d7f8d520805b.png)
@@ -87,3 +84,7 @@ real    0m16.363s
 user    0m7.101s
 sys     0m2.013s
 </pre>
+
+  Now you can setup the Namidance calculation by secifying ** outDem.grd** as bathymetry and **outLake.grd** as deformation file. Then the NAMIDANCE computation can start
+ 
+  
