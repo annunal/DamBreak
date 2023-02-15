@@ -33,7 +33,7 @@ where:
 
 Identify the dedicated SRTM files that complse the dem. In case you need more SRTM sections, download them and the combine into ne single srtm.tif file.
 To download you can use:  https://dwtkns.com/srtm30m/
-For this case the specific piece to download is N43E013
+For this case the specific piece to download is N15E88 and N14E88.
 ![selection_srtm](https://user-images.githubusercontent.com/10267112/218966318-7aab2e1d-c40d-460a-a218-9949566eaf04.JPG)
 
 Then you have to identify the lake point and the down dam point.  The lake point is a point very close to the dam and where the level is constant in the SRTM file representing the surface of the upstream lake.
