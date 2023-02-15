@@ -5,7 +5,7 @@ conda create -n gdal
 conda install gdal
 
 A number of tools are available:
-* [NAMIDANCE files] (#namidance-files-creation)
+* <a href="https://github.com/annunal/DamBreak/blob/main/README.md#namidance-files-creation">Namidance files creation</a>
 * [Arrival Time computation] (#arrival-time-computation)
 * [Extraction of timelines] (#extraction-of-timelines)
 
