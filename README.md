@@ -25,7 +25,8 @@ where:
 
 
 Example: El Cajun (Honduras) dam break
-![wholeLake](https://user-images.githubusercontent.com/10267112/218803450-b19dd755-7849-4dbd-8264-bc1da0de5dc0.png)
+![wholeArea](https://user-images.githubusercontent.com/10267112/218968706-29ab1a9e-53be-4596-b036-70241c9039de.png)
+
 
 Identify the dedicated SRTM files that complse the dem. In case you need more SRTM sections, download them and the combine into ne single srtm.tif file.
 To download you can use:  https://dwtkns.com/srtm30m/
@@ -33,7 +34,8 @@ For this case the specific piece to download is N43E013
 ![selection_srtm](https://user-images.githubusercontent.com/10267112/218966318-7aab2e1d-c40d-460a-a218-9949566eaf04.JPG)
 
 Then you have to identify the lake point and the down dam point.  
-![inputPoints](https://user-images.githubusercontent.com/10267112/218804799-ba885bbf-09b8-4e9b-ab7a-d7f8d520805b.png)
+![inputPoints](https://user-images.githubusercontent.com/10267112/218968378-faee4bea-8703-4eb3-9478-5c351106dbd2.png)
+
 
 The lake point is a point very close to the dam and where the level is constant in the SRTM file representing the surface of the upstream lake.
 
@@ -87,4 +89,5 @@ sys     0m2.013s
 
   Now you can setup the Namidance calculation by secifying ** outDem.grd** as bathymetry and **outLake.grd** as deformation file. Then the NAMIDANCE computation can start
  
-  
+  ![namidance_start](https://user-images.githubusercontent.com/10267112/218967068-f8d84762-3dc2-4c6b-bada-970b15817ff8.JPG)
+
