@@ -13,17 +13,17 @@ To run use this command:
 creaFiles.py [-d basedir] [-s srtm.tif] -w  0.3 -lp 36.32  36.19 -dp 36.12 37.42 [-od outDem.grd]  [-ol outLake.grd ]  [-bbox xmin ymin xmax ymax] [-res NewCellSize]
 
 where:
-<ul>
-<li><b>-d<b> <dir>:  is the base directory. If is not specified the current directory is used</li>
-<li><b>-s</b> <fname>:  is the SRTM file that is used [default:  srtm.tif].  You can specify more files included in double apices and separated by a + sign. In that case it will merge the files before cropping to the desired extent with bbox</li>
-<li><b>-w</b> <sizeKM>:</li>
-<li><b>-lp</b> <lon lat>:</li>
-<li><b>-dp</b> <lon lat> </li>
-<li><b>-od</b> <output dem grid></li>
-<li><b>-ol</b> <output Lake grid>:</li>
-<li><b>-bbox</b> <xmin ymin xmax ymax></li>
-<li><b>-res</b> <NewCellSize> in degrees</li>
-</ul>
+
+* **-d** <dir>:  is the base directory. If is not specified the current directory is used
+* **-s** <fname>:  is the SRTM file that is used [default:  srtm.tif].  You can specify more files included in double apices and separated by a + sign. In that case it will merge the files before cropping to the desired extent with bbox
+* **-w** <sizeKM>:
+* **-lp** <lon lat>:
+* **-dp** <lon lat> 
+* **-od** <output dem grid>
+* **-ol** <output Lake grid>:
+* **-bbox** <xmin ymin xmax ymax>
+* **-res** <NewCellSize> in degrees
+
 
 Example: El Cajun (Honduras) dam break
 ![wholeArea](https://user-images.githubusercontent.com/10267112/218968706-29ab1a9e-53be-4596-b036-70241c9039de.png)
@@ -34,22 +34,21 @@ To download you can use:  https://dwtkns.com/srtm30m/
 For this case the specific piece to download is N43E013
 ![selection_srtm](https://user-images.githubusercontent.com/10267112/218966318-7aab2e1d-c40d-460a-a218-9949566eaf04.JPG)
 
-Then you have to identify the lake point and the down dam point.  
+Then you have to identify the lake point and the down dam point.  The lake point is a point very close to the dam and where the level is constant in the SRTM file representing the surface of the upstream lake.
 ![inputPoints](https://user-images.githubusercontent.com/10267112/218968378-faee4bea-8703-4eb3-9478-5c351106dbd2.png)
 
 
-The lake point is a point very close to the dam and where the level is constant in the SRTM file representing the surface of the upstream lake.
-
 The down Dam point is a point downstream the dam. The difference in height of these two points represent the dam water jump.
 
-time python creaFiles.py -d ./Cingoli -s /data/N43E013.hgt -lp  13.161652  43.382106 -w 0.1 -dp  13.163041  43.384161   -bbox "13.092161  43.343359 13.724455  43.731141"
+  <pre>
+time python creaFiles.py -d El_Cajun -s  "/data/N14W088.hgt+/data/N15W088.hgt"  -w 0.06  -lp -87.744886  15.02809  -dp -87.745366  15.030250 -bbox "-88. 14.800 -87.400 15.400"
+  </pre>
 
 The result is the following:
 <pre>
-time python creaFiles.py -d El_Cajun -s  "/data/N14W088.hgt+/data/N15W088.hgt"  -w 0.06  -lp -87.744886  15.02809  -dp -87.745366  15.030250 -bbox "-88. 14.800 -87.400 15.400"
-<b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b>*
+*************************************************
 *   Preparation of file for NAMIDANCE DB calc
-<b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b><b>*
+*************************************************
 srtm file     = /data/N14W088.hgt+/data/N15W088.hgt
 Lake Point    = [-87.744886, 15.02809]
 Down dam Point= [-87.745366, 15.03025]
@@ -88,7 +87,7 @@ user    0m7.101s
 sys     0m2.013s
 </pre>
 
-  Now you can setup the Namidance calculation by secifying <b> outDem.grd</b> as bathymetry and <b>outLake.grd</b> as deformation file. Then the NAMIDANCE computation can start
+  Now you can setup the Namidance calculation by secifying **outDem.grd** as bathymetry and **outLake.grd** as deformation file. Then the NAMIDANCE computation can start
  
   ![namidance_start](https://user-images.githubusercontent.com/10267112/218967068-f8d84762-3dc2-4c6b-bada-970b15817ff8.JPG)
 
