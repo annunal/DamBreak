@@ -13,16 +13,17 @@ To run use this command:
 creaFiles.py [-d basedir] [-s srtm.tif] -w  0.3 -lp 36.32  36.19 -dp 36.12 37.42 [-od outDem.grd]  [-ol outLake.grd ]  [-bbox xmin ymin xmax ymax] [-res NewCellSize]
 
 where:
--d <dir>:  is the base directory. If is not specified the current directory is used
--s <fname>:  is the SRTM file that is used [default:  srtm.tif]
--w <sizeKM>:
--lp <lon lat>:
--dp <lon lat> 
--od <output dem grid>
--ol <output Lake grid>:
--bbox <xmin ymin xmax ymax>
--res <NewCellSize>
-
+<ul>
+<li>**-d** <dir>:  is the base directory. If is not specified the current directory is used</li>
+<li>**-s** <fname>:  is the SRTM file that is used [default:  srtm.tif].  You can specify more files included in double apices and separated by a + sign. In that case it will merge the files before cropping to the desired extent with bbox</li>
+<li>**-w** <sizeKM>:</li>
+<li>**-lp** <lon lat>:</li>
+<li>**-dp** <lon lat> </li>
+<li>**-od** <output dem grid></li>
+<li>**-ol** <output Lake grid>:</li>
+<li>**-bbox** <xmin ymin xmax ymax></li>
+<li>**-res** <NewCellSize> in degrees</li>
+</ul>
 
 Example: El Cajun (Honduras) dam break
 ![wholeArea](https://user-images.githubusercontent.com/10267112/218968706-29ab1a9e-53be-4596-b036-70241c9039de.png)
