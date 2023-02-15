@@ -45,50 +45,45 @@ The down Dam point is a point downstream the dam. The difference in height of th
 time python creaFiles.py -d ./Cingoli -s /data/N43E013.hgt -lp  13.161652  43.382106 -w 0.1 -dp  13.163041  43.384161   -bbox "13.092161  43.343359 13.724455  43.731141"
 
 The result is the following:
-time python creaFiles.py -d ./Cingoli -s /data/N43E013.hgt -lp  13.161652  43.382106 -w 0.1 -dp  13.163041  43.384161   -bbox "13.092161  43.343359 13.724455  43.731141"
+<pre>
+time python creaFiles.py -d El_Cajun -s  "/data/N14W088.hgt+/data/N15W088.hgt"  -w 0.06  -lp -87.744886  15.02809  -dp -87.745366  15.030250 -bbox "-88. 14.800 -87.400 15.400"
 *************************************************
 *   Preparation of file for NAMIDANCE DB calc
 *************************************************
-srtm file     = ./Cingoli//data/N43E013.hgt
-Lake Point    = [13.161652, 43.382106]
-Down dam Point= [13.163041, 43.384161]
-output DEM    = ./Cingoli/outDem.grd
-output Lake   = ./Cingoli/outLake.grd
-resizing dem ./Cingoli//data/N43E013.hgt to   =   new file=./Cingoli/srtmNew.tif  to: 13.092161  43.343359 13.724455  43.731141
-gdalwarp  -r near -te 13.092161  43.343359 13.724455  43.731141 ./Cingoli//data/N43E013.hgt ./Cingoli/srtmNew.tif
-Creating output file that is 2276P x 1396L.
-Processing ./Cingoli//data/N43E013.hgt [1/1] : 0Using internal nodata values (e.g. -32768) for image ./Cingoli//data/N43E013.hgt.
-Copying nodata values from source ./Cingoli//data/N43E013.hgt to destination ./Cingoli/srtmNew.tif.
-...10...20...30...40...50...60...70...80...90...100 - done.
-Opening dem: ./Cingoli/srtmNew.tif
+srtm file     = /data/N14W088.hgt+/data/N15W088.hgt
+Lake Point    = [-87.744886, 15.02809]
+Down dam Point= [-87.745366, 15.03025]
+output DEM    = El_Cajun/outDem.grd
+output Lake   = El_Cajun/outLake.grd
+gdal_merge.py  -o El_Cajun/srtmMerge.tif El_Cajun/data/N14W088.hgt El_Cajun/data/N15W088.hgt
+0...10...20...30...40...50...60...70...80...90...100 - done.
+resizing dem El_Cajun/srtmMerge.tif to   =   new file=El_Cajun/srtmNew.tif  to: -88. 14.800 -87.400 15.400
+gdalwarp  -r near -te -88. 14.800 -87.400 15.400 El_Cajun/srtmMerge.tif El_Cajun/srtmNew.tif
+Creating output file that is 2160P x 2160L.
+Processing El_Cajun/srtmMerge.tif [1/1] : 0...10...20...30...40...50...60...70...80...90...100 - done.
+Opening dem: El_Cajun/srtmNew.tif
 data type:  Int16
--19 793 -32768.0 0.0002778093145869947 2276 1396
-reshaping file as 2276 1396
-row col of lake 1257 250
-Lake dem= 327    Downdam dem= 294    Jump= 33
+17 2312 None 0.0002777777777777751 2160 2160
+reshaping file as 2160 2160
+row col of lake 1339 918
+Lake dem= 285    Downdam dem= 266    Jump= 19
 2 True False
-delta, dmax= 100 2026
-delta, dmax= 200 2026
-delta, dmax= 300 2026
-delta, dmax= 400 2026
-delta, dmax= 500 2026
-delta, dmax= 600 2026
-delta, dmax= 700 2026
-delta, dmax= 800 2026
-delta, dmax= 900 2026
-delta, dmax= 1000 2026
-delta, dmax= 1100 2026
-delta, dmax= 1200 2026
-delta, dmax= 1300 2026
-delta, dmax= 1400 2026
-delta, dmax= 1500 2026
-delta, dmax= 1600 2026
-delta, dmax= 1700 2026
-delta, dmax= 1800 2026
-delta, dmax= 1900 2026
-delta, dmax= 2000 2026
-vv# 1251 1255
+delta, dmax= 100 1339
+delta, dmax= 200 1339
+delta, dmax= 300 1339
+delta, dmax= 400 1339
+delta, dmax= 500 1339
+delta, dmax= 600 1339
+delta, dmax= 700 1339
+delta, dmax= 800 1339
+delta, dmax= 900 1339
+delta, dmax= 1000 1339
+delta, dmax= 1100 1339
+delta, dmax= 1200 1339
+delta, dmax= 1300 1339
+vv# 1334 1336
 
-real    0m11.197s
-user    0m6.886s
-sys     0m0.879s
+real    0m16.363s
+user    0m7.101s
+sys     0m2.013s
+</pre>
