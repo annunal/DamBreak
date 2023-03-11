@@ -21,14 +21,8 @@ import pandas
 
 
 gdalwarp="gdalwarp"  #/share/apps/GDAL/bin/gdalwarp"
-PopulationDensityBaseFile="/mnt/DISKD/DAM_BREAK/DATA/lspop20141.tif"
-PopFileDesc="LANDSCAN 2014"
-#popCellsize="0.008333333333333"
-#srcNDV=''
 
-#PopulationDensityBaseFile="/mnt/output/SSCS/DATA/GHS_POP_GPW42015_GLOBE_R2015A_54009_250_v1_0.tif"
-#PopFileDesc="GHSL JRC"
-#popCellsize="0.001248439450687"
+
 #srcNDV='-32768'
 
 countriesFile="/mnt/DISKD/DAM_BREAK/DATA/countries.tif"
@@ -42,7 +36,7 @@ def readCountries():
 #=============================================================================================================
 def dprint(a,b='',c='',d='',e='',f='',g='',h='',i=''):
     debug=False
-    debug=True
+    #debug=True
     if debug:
         print(a,b,c,d,e,f,g,h,i)
 
@@ -83,7 +77,7 @@ def readGDAL(fname, onlygeoT=False, onlyNDV=False):
     return values,NoDataValue
     
 def classValues(claMin,claMax,values,popDensValues,countryValues,NDV,NoDataValue,NoDataValueC,n0,n1):
-    maxValueWind=-1
+    maxValueWatHei=-1
     classification_countries = [[] ,[],[] , [], [], [], []]
     popcountries=[]
     popvalues=[0,0,0,0,0,0,0]
@@ -112,8 +106,8 @@ def classValues(claMin,claMax,values,popDensValues,countryValues,NDV,NoDataValue
             for index in range(0,len(claMin)):
                     
                 if value > claMin[index] and value<=claMax[index] and (not cl==NoDataValue) and (not value==NDV):
-                    if value>maxValueWind:
-                        maxValueWind=value
+                    if value>maxValueWatHei:
+                        maxValueWatHei=value
                     
                     #if cl_value>1:
                     #    print "index=",index,"cell=",cell, "value=", value,"cl_value=",cl_value
@@ -148,14 +142,14 @@ def classValues(claMin,claMax,values,popDensValues,countryValues,NDV,NoDataValue
                 #index = index + 1
         #print cell, values[cell],classification_output_values[index]
         #cell = cell +1
-    res=[n0,n1,maxValueWind,classification_countries,popvalues,popcountries]
+    res=[n0,n1,maxValueWatHei,classification_countries,popvalues,popcountries]
     return res
         
-def classFile(u10maxFile,pwd, desc, outxml, suffix='',factor=1):
+def classFile(u10maxFile,pwd, desc, outxml,PopulationDensityBaseFile,PopFileDesc,suffix='',factor=1):
 
-    maxValueWind1=-1
-    maxValueWind2=-1
-    maxValueWind3=-1
+    maxValueWatHei1=-1
+    maxValueWatHei2=-1
+    maxValueWatHei3=-1
     
     claMin=[0,  0.2,   2.5, 5., 10., 20.]   #The interval values to classify
     claMax=[0.2, 2.5,   5., 10., 20., 1000] #The interval values to classify
@@ -176,9 +170,9 @@ def classFile(u10maxFile,pwd, desc, outxml, suffix='',factor=1):
     # Syntax:  classify.py  u10filename  fileOutClassified   workdir
 
 
-    popdensity_file=pwd+"popfile_clipped.tif"
-    country_file0=pwd+"countryfile_clipped0.tif"
-    country_file=pwd+"countryfile_clipped.tif"
+    popdensity_file=pwd+os.sep+"popfile_clipped.tif"
+    country_file0=pwd+os.sep+"countryfile_clipped0.tif"
+    country_file=pwd+os.sep+"countryfile_clipped.tif"
 
     print ('Input file: ', u10maxFile)
     print ('PopFile: ', popdensity_file)
@@ -226,7 +220,7 @@ def classFile(u10maxFile,pwd, desc, outxml, suffix='',factor=1):
     # resmaple as population
     cmd="-r bilinear -tr " + str(popCellSize) +" " + str(popCellSize)+ " " +t_srs
     
-    raster_file=pwd+"u10res.tif"
+    raster_file=pwd+os.sep+"u10res.tif"
 
     try:
         os.remove(raster_file)
@@ -234,9 +228,8 @@ def classFile(u10maxFile,pwd, desc, outxml, suffix='',factor=1):
         pass    
 
     fullCmd=' '.join([gdalwarp,cmd,youCanQuoteMe(u10maxFile),youCanQuoteMe(raster_file)])
-    dprint (fullCmd)
-    #subprocess.call(fullCmd)
-    os.system(fullCmd +'>>'+pwd+'logwarp.txt')
+    dprint(fullCmd +'>>'+pwd+os.sep+'logwarp.txt')
+    os.system(fullCmd +'>>'+pwd+os.sep+'logwarp.txt')
 
     #-------------------------------------------------------------------------------
     #  2.  read the charactristics of the input file
@@ -279,7 +272,7 @@ def classFile(u10maxFile,pwd, desc, outxml, suffix='',factor=1):
     fullCmd=gdalwarp+' '+' '.join([cmd,youCanQuoteMe(PopulationDensityBaseFile),youCanQuoteMe(popdensity_file)])
     
     dprint (fullCmd)
-    os.system(fullCmd +'>>'+pwd+'logwarp.txt')
+    os.system(fullCmd +'>>'+pwd+os.sep+'logwarp.txt')
 
     #-------------------------------------------------------------------------------
     #  3a.  extract a piece of countries corresponding to the required bounding box and proj to popDensity
@@ -318,7 +311,7 @@ def classFile(u10maxFile,pwd, desc, outxml, suffix='',factor=1):
     values1=np.array(values0)/factor
     popDensValues1=np.array(popDensValues0)
     countryValues1=np.array(countryValues0)
-    maxValueWind1=np.amax(values1[values1 != NDV])
+    maxValueWatHei1=np.amax(values1[values1 != NDV])
     
     ids,countries,isocodes=readCountries()
     
@@ -339,7 +332,7 @@ def classFile(u10maxFile,pwd, desc, outxml, suffix='',factor=1):
     dprint (values.shape,np.shape(popDensValues),np.shape(countryValues))
     
     if len(values)>0:
-        maxValueWind2=np.amax(values)
+        maxValueWatHei2=np.amax(values)
         #-------------------------------------------------------------------------------
         #  5.  count the popolation in each cell and assign to the class and write to output
         #-------------------------------------------------------------------------------
@@ -350,7 +343,7 @@ def classFile(u10maxFile,pwd, desc, outxml, suffix='',factor=1):
 
         parallel=False
         for index in range(0,len(claMin)):
-                classification_output_ranges[index]="wind>"+str(claMin[index])+" and <="+str(claMax[index])
+                classification_output_ranges[index]="WatHei>"+str(claMin[index])+" and <="+str(claMax[index])
             
         if parallel:
             # # Create jobserver
@@ -363,7 +356,7 @@ def classFile(u10maxFile,pwd, desc, outxml, suffix='',factor=1):
             # jobs = []
 
             
-            # maxValueWind=-1
+            # maxValueWatHei=-1
             # results=[]
             # dprint ('start with ', job_server.get_ncpus())
             
@@ -376,7 +369,7 @@ def classFile(u10maxFile,pwd, desc, outxml, suffix='',factor=1):
                 # jobs.append(job_server.submit(classValues, (claMin,claMax,values,popDensValues,countryValues,NDV,NoDataValue,NoDataValueC,n0,n1)))
             
             # job_server.wait()
-            # maxValueWind=-1
+            # maxValueWatHei=-1
             # for job in jobs:
                 # dprint (job())
                 # #for res in job():
@@ -386,7 +379,7 @@ def classFile(u10maxFile,pwd, desc, outxml, suffix='',factor=1):
                 # n0=res[0]
                 # n1=res[1]
                 # mx=res[2]
-                # if mx>maxValueWind: maxValueWind=mx
+                # if mx>maxValueWatHei: maxValueWatHei=mx
         
                 # classification_countriesX=res[3]
                 # popvaluesX=res[4]
@@ -405,7 +398,7 @@ def classFile(u10maxFile,pwd, desc, outxml, suffix='',factor=1):
             n0=0
             n1=values.shape[0]
             res=classValues(claMin,claMax,values,popDensValues,countryValues,NDV,NoDataValue,NoDataValueC,n0,n1)
-            maxValueWind3=res[2]
+            maxValueWatHei3=res[2]
             popvalues=res[4]
             classification_countriesX=res[3]
             popcountries=res[5]
@@ -418,11 +411,11 @@ def classFile(u10maxFile,pwd, desc, outxml, suffix='',factor=1):
                             classification_countries[index] +=cou
     
     # --- new ---
-    if maxValueWind1>300: maxValueWind1=-1
-    if maxValueWind2>300: maxValueWind2=-1
-    if maxValueWind3>300: maxValueWind3=-1
-    ValueALL=[maxValueWind1,maxValueWind2,maxValueWind3]
-    maxValueWind=np.max(ValueALL)
+    if maxValueWatHei1>300: maxValueWatHei1=-1
+    if maxValueWatHei2>300: maxValueWatHei2=-1
+    if maxValueWatHei3>300: maxValueWatHei3=-1
+    ValueALL=[maxValueWatHei1,maxValueWatHei2,maxValueWatHei3]
+    maxValueWatHei=np.max(ValueALL)
     #-------------------------------------------------------------------------------
     #  6.  print( output
     #-------------------------------------------------------------------------------
@@ -434,7 +427,7 @@ def classFile(u10maxFile,pwd, desc, outxml, suffix='',factor=1):
     
     
     out_xml=open(outxml,"w")
-    out_xml.write('<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<popvalues MaxValueWind=\"'+str(maxValueWind)+'\" unit="m/s" >\n')
+    out_xml.write('<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<popvalues MaxValueWatHei=\"'+str(maxValueWatHei)+'\" unit="m" >\n')
     out_xml.write("<!-- "+desc+"  -->\n")
     out_xml.write("<!-- "+PopulationDensityBaseFile+"  -->\n")
     out_xml.write("<!-- "+PopFileDesc+"  -->\n")
@@ -485,6 +478,7 @@ if __name__ == "__main__":
     #desc='Mozambique'
     desc='case'
     ncf=False
+    pop='LS'
     for j in range(1,len(sys.argv)-1):
         arg,value=sys.argv[j:j+2]
         print('arg=',arg,'value=',value)
@@ -492,12 +486,27 @@ if __name__ == "__main__":
         if arg=='-desc':desc=value
         if arg=='-fm':u10maxFile=value
         if arg=='-nc':ncf=True
-    
+        if arg=='-p':pop=value
+    if pop=='LS':
+        PopulationDensityBaseFile="/mnt/DISKD/DAM_BREAK/DATA/lspop20141.tif"
+        PopFileDesc="LANDSCAN 2014"
+        #popCellsize="0.008333333333333"
+    elif pop=='GHSL':
+    #srcNDV=''
+        #https://ghsl.jrc.ec.europa.eu/download.php?ds=pop to download this file and then 
+        #choose 1 km resolution, Mollweide
+        #PopulationDensityBaseFile="/mnt/DISKD/DAM_BREAK/DATA/GHS_POP_GPW42015_GLOBE_R2015A_54009_250_v1_0.tif"
+        #popCellsize="0.001248439450687"
+        PopulationDensityBaseFile="/mnt/DISKD/DAM_BREAK/DATA/GHS_POP_E2015_GLOBE_R2019A_4326_30ss_V1_0.TIF"
+        PopFileDesc="GHSL JRC"
+        #popCellsize="0.008333333333333"
+
     if ncf:
-        cmd='gdal_translate -ot Float64  NETCDF:OUT-EXTREMUM.nc:FD_MAX -b 1 -unscale  '+dir+os.sep+'FD_MAX.tif'
+        cmd='gdal_translate -ot Float64  NETCDF:'+dir+os.sep+'OUT-EXTREMUM.nc:FD_MAX -b 1 -unscale  '+dir+os.sep+'FD_MAX.tif'
         u10maxFile=dir+os.sep+'FD_MAX.tif'
         print(cmd)
         os.system(cmd)
 
-    outxml=dir+os.sep+'outClassify.xml'
-    classFile(u10maxFile,dir, desc,outxml,'')
+    outxml=dir+os.sep+'outClassify_'+pop+'.xml'
+    classFile(u10maxFile,dir, desc,outxml,PopulationDensityBaseFile,PopFileDesc,'',1)
+
