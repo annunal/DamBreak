@@ -167,7 +167,8 @@ def findcols(dem1,dematpoi,row0,col0,xsize,demOut,vout=-1000):
     colmin=col
     return colmin,colmax,demOut
 
-def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHeight='',simple=2):
+def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHeight='',simple=2,deltaLake=0.0):
+   
     print('Opening dem:',fnameDEM)
     cell,proj=readGDAL(fnameDEM,True)
     dem,nodata,xsize,ysize,geoT=readGDAL(fnameDEM)
@@ -175,19 +176,22 @@ def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHe
     dem1=np.reshape(dem,[ysize,xsize])
     row0,col0=getRowCol(LakePoint,xsize,ysize,geoT)
     print('row col of lake',row0,col0)
+    
     if LakeHeight=='':
         dematpoi=dem1[row0,col0]
+        deltaLake=0.0
     else:
-        dematpoi=LakeHeight
+        dematpoi=dem1[row0,col0]
+        deltaLake=LakeHeight-dem1[row0,col0]
     row1,col1=getRowCol(DownDamPoint,xsize,ysize,geoT)
     dematdown=dem1[row1,col1]
-    lake=-dematpoi+dem1
+    lake=-dematpoi+dem1  #-deltaLake
     #demRiver=dem1.copy()
     print('Lake dem=',dematpoi,'   Downdam dem=',dematdown,  '   Jump=',dematpoi-dematdown)
     print(simple,simple==2,simple==True)
     if simple==True:
         dem2=dem1.copy()
-        dem2[dem2==dematpoi]=0.0
+        dem2[dem2==dematpoi]=0.0 #-deltaLake
         dem= dematpoi-dem2
         #lake=-dematpoi+dem1
         #CreateGeoTiff(fnameOut,dem,xsize,ysize,geoT,-99999,'GSAG')
@@ -229,18 +233,22 @@ def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHe
                for col in range(col1,col2):
                   #if dem1[row1,col]==dematpoi:
                   if checkAround(dem1,row1,col,xsize,ysize,dematpoi):
-                     dem2[row1,col]=dematdown
+                     dem2[row1,col]=dematdown #+deltaLake
+                     lake[row1,col]=deltaLake                     
                   #if dem1[row2,col]==dematpoi:
                   if checkAround(dem1,row2,col,xsize,ysize,dematpoi):
-                     dem2[row2,col]=dematdown
+                     dem2[row2,col]=dematdown #+deltaLake
+                     lake[row2,col]=deltaLake
                for row in range(row1+1,row2):
                   #if dem1[row,col1]==dematpoi:
                   if checkAround(dem1,row,col1,xsize,ysize,dematpoi):
-                     dem2[row,col1]=dematdown
+                     dem2[row,col1]=dematdown #+deltaLake
+                     lake[row,col1]=deltaLake
                   #if dem1[row,col2]==dematpoi:
                   if checkAround(dem1,row,col2,xsize,ysize,dematpoi):
-                     dem2[row,col2]=dematdown
-           dem= dematpoi-dem2     
+                     dem2[row,col2]=dematdown #+deltaLake
+                     lake[row,col2]=deltaLake
+           dem= dematpoi-dem2 #+deltaLake     
            #row1,col1=getRowCol(DownDamPoint,xsize,ysize,geoT)
            #demRiver=lookAround(dem1,demRiver,row1,col1,xsize,ysize,around)
            #row0,col0=getRowCol(DownDamPoint,xsize,ysize,geoT)  
@@ -260,8 +268,8 @@ def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHe
         #dem[vertixP[kk][0],vertixP[kk][1]]=-2000
         #print(vertixP[kk])
     for cou in rect:
-        dem[cou[0],cou[1]]=dematpoi-dematdown
-        lake[cou[0],cou[1]]=0.0
+        dem[cou[0],cou[1]]=dematpoi-dematdown #+deltaLake
+        lake[cou[0],cou[1]]=deltaLake
     CreateGeoTiff(fnameOut,dem,xsize,ysize,geoT,-99999,'GSBG')
     CreateGeoTiff(fnameOutLake,lake,xsize,ysize,geoT,-99999,'GSBG')
     #CreateGeoTiff(fnameOutRiver,demRiver,xsize,ysize,geoT,-99999,'GSBG')
@@ -350,6 +358,7 @@ if __name__ == "__main__":
     fnameOutLake='outLake.grd'
     #fnameOutRiver='outRiver.grd'
     sizeKM=None
+    deltaLake=0.0
     LakePoint=[]
     dire=''
     newCellSize=''
@@ -371,7 +380,7 @@ if __name__ == "__main__":
         elif arg=='-lp':
             LakePoint=[float(args[j+1]),float(args[j+2])]
         elif arg=='-lh':
-            LakeHeight=float(arg[j+1])
+            LakeHeight=float(args[j+1])
         elif arg=='-dp':
             DownDamPoint=[float(args[j+1]),float(args[j+2])]
         elif arg=='-d':
@@ -380,6 +389,8 @@ if __name__ == "__main__":
             newCellSize=float(args[j+1])
         elif arg=='-bbox':
             bbox=args[j+1]
+        elif arg=='-dl':
+            deltaLake=float(args[j+1])
                     
     if dire !='':
         fnameDem=dire+os.sep+fnameDem
@@ -404,6 +415,7 @@ if __name__ == "__main__":
     print('Down dam Point=',DownDamPoint)
     print('output DEM    =',fnameOut)
     print('output Lake   =',fnameOutLake)
+    #print('delta laake   =',deltaLake)
     #print('output River   =',fnameOutRiver)
     if newCellSize!='' or bbox!='':
         if bbox!='':
@@ -420,7 +432,7 @@ if __name__ == "__main__":
         print(cmd)
         os.system(cmd)
         fnameDem=fnameDemNew
-    creaLake(fnameDem,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHeight,2) 
+    creaLake(fnameDem,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHeight,2,deltaLake) 
     
     quit()
 #Cingoli
