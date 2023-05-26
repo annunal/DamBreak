@@ -167,7 +167,7 @@ def findcols(dem1,dematpoi,row0,col0,xsize,demOut,vout=-1000):
     colmin=col
     return colmin,colmax,demOut
 
-def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHeight='',simple=2,deltaLake=0.0):
+def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHeight='',simple=2):
    
     print('Opening dem:',fnameDEM)
     cell,proj=readGDAL(fnameDEM,True)
@@ -358,7 +358,6 @@ if __name__ == "__main__":
     fnameOutLake='outLake.grd'
     #fnameOutRiver='outRiver.grd'
     sizeKM=None
-    deltaLake=0.0
     LakePoint=[]
     dire=''
     newCellSize=''
@@ -389,8 +388,7 @@ if __name__ == "__main__":
             newCellSize=float(args[j+1])
         elif arg=='-bbox':
             bbox=args[j+1]
-        elif arg=='-dl':
-            deltaLake=float(args[j+1])
+
                     
     if dire !='':
         fnameDem=dire+os.sep+fnameDem
@@ -432,7 +430,7 @@ if __name__ == "__main__":
         print(cmd)
         os.system(cmd)
         fnameDem=fnameDemNew
-    creaLake(fnameDem,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHeight,2,deltaLake) 
+    creaLake(fnameDem,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHeight,2) 
     
     quit()
 #Cingoli
