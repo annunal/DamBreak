@@ -125,8 +125,8 @@ def getRowCol(poi,xsize,ysize,geoT):
     lonMax=lonMin+cell*xsize
     latMax=geoT[3]
     latMin=latMax-cell*ysize
-    col=int((lon-lonMin)/(cell))
-    row=ysize-int((lat-latMin)/(cell))
+    col=int(round((lon-lonMin)/(cell),0))
+    row=ysize-int(round((lat-latMin)/(cell),0))
     return row,col
 def   getRowColInv(row,col,xsize,ysize,geoT):
     cell=geoT[1]
@@ -166,8 +166,23 @@ def findcols(dem1,dematpoi,row0,col0,xsize,demOut,vout=-1000):
             demOut[row0,col]=vout                
     colmin=col
     return colmin,colmax,demOut
+ 
+def getdist(row0,col0,row,col,cell):
+     distKM=cell*110*((row0-row)**2+(col0-col)**2)**0.5
+     return distKM
 
-def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHeight='',simple=2):
+def setCell(a,row0,col0,value,delta=1):
+  #print(row0,col0,value)
+  #print(a)
+  for row in range(row0-delta,row0+delta+1):
+    for col in range(col0-delta,col0+delta+1):
+      try:
+        a[row,col]=value
+      except Exception as e:
+        print('**',e)
+  return a
+  
+def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,maxdistance,LakeHeight='',simple=2):
    
     print('Opening dem:',fnameDEM)
     cell,proj=readGDAL(fnameDEM,True)
@@ -182,7 +197,7 @@ def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHe
         deltaLake=0.0
     else:
         dematpoi=dem1[row0,col0]
-        deltaLake=LakeHeight-dem1[row0,col0]
+        deltaLake=LakeHeight #-dem1[row0,col0]
     row1,col1=getRowCol(DownDamPoint,xsize,ysize,geoT)
     dematdown=dem1[row1,col1]
     lake=-dematpoi+dem1  #-deltaLake
@@ -231,23 +246,36 @@ def creaLake(fnameDEM,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHe
                if col1<0: col1=0
                
                for col in range(col1,col2):
-                  #if dem1[row1,col]==dematpoi:
-                  if checkAround(dem1,row1,col,xsize,ysize,dematpoi):
-                     dem2[row1,col]=dematdown #+deltaLake
-                     lake[row1,col]=deltaLake                     
-                  #if dem1[row2,col]==dematpoi:
-                  if checkAround(dem1,row2,col,xsize,ysize,dematpoi):
-                     dem2[row2,col]=dematdown #+deltaLake
-                     lake[row2,col]=deltaLake
+                  dist=getdist(row0,col0,row1,col,cell)
+                  if checkAround(dem1,row1,col,xsize,ysize,dematpoi) and dist<maxdistance:
+                     #dem2[row1,col]=dematdown #+deltaLake                     
+                     #lake[row1,col]=deltaLake
+   #                  print('shape dem2=',np.shape(dem2),dem2[row1,col])
+                     dem2=setCell(dem2,row1,col,dematdown)
+                     lake=setCell(lake,row1,col,deltaLake)                     
+                  dist=getdist(row0,col0,row2,col,cell)
+                  if checkAround(dem1,row2,col,xsize,ysize,dematpoi) and dist<maxdistance:
+                     #dem2[row2,col]=dematdown #+deltaLake
+                     #lake[row2,col]=deltaLake
+                     
+                     dem2=setCell(dem2,row2,col,dematdown)
+                     lake=setCell(lake,row2,col,deltaLake)                     
+
                for row in range(row1+1,row2):
-                  #if dem1[row,col1]==dematpoi:
-                  if checkAround(dem1,row,col1,xsize,ysize,dematpoi):
-                     dem2[row,col1]=dematdown #+deltaLake
-                     lake[row,col1]=deltaLake
-                  #if dem1[row,col2]==dematpoi:
-                  if checkAround(dem1,row,col2,xsize,ysize,dematpoi):
-                     dem2[row,col2]=dematdown #+deltaLake
-                     lake[row,col2]=deltaLake
+                  dist=getdist(row0,col0,row,col1,cell)
+                  if checkAround(dem1,row,col1,xsize,ysize,dematpoi) and dist<maxdistance:
+                     #dem2[row,col1]=dematdown #+deltaLake
+                     #lake[row,col1]=deltaLake
+                     dem2=setCell(dem2,row,col1,dematdown)
+                     lake=setCell(lake,row,col1,deltaLake)                     
+
+                  dist=getdist(row0,col0,row,col2,cell)
+                  if checkAround(dem1,row,col2,xsize,ysize,dematpoi) and dist<maxdistance:
+                     #dem2[row,col2]=dematdown #+deltaLake
+                     #lake[row,col2]=deltaLake
+                     dem2=setCell(dem2,row,col2,dematdown)
+                     lake=setCell(lake,row,col2,deltaLake)                     
+                     
            dem= dematpoi-dem2 #+deltaLake     
            #row1,col1=getRowCol(DownDamPoint,xsize,ysize,geoT)
            #demRiver=lookAround(dem1,demRiver,row1,col1,xsize,ysize,around)
@@ -363,6 +391,7 @@ if __name__ == "__main__":
     newCellSize=''
     DownDamPoint=[]
     bbox=''
+    maxdist=1.e9
     LakeHeight=''
     for j in range(len(args)):
         arg=args[j]
@@ -388,8 +417,10 @@ if __name__ == "__main__":
             newCellSize=float(args[j+1])
         elif arg=='-bbox':
             bbox=args[j+1]
+        elif arg=='-md':
+            maxdist=float(args[j+1])
 
-                    
+    fnameDem0=fnameDem             
     if dire !='':
         fnameDem=dire+os.sep+fnameDem
         fnameOut=dire+os.sep+fnameOut
@@ -402,7 +433,7 @@ if __name__ == "__main__":
         if DownDamPoint==[]:print('DownDamPoint not defined, -dp  x y')
         print('syntax: creaFiles.py [-s srtm.tif] -w  0.3 -lp 36.32  36.19 -dp 36.12 37.42 [-od outDem.grd]  [-ol outLake.grd ]  [-bbox xmin ymin xmax ymax')
         quit()
-    if not os.path.exists(fnameDem):
+    if (not '+' in fnameDem) and (not os.path.exists(fnameDem)):
         print('Dem file not existing:',fnameDem)
         quit()
     print('*************************************************')
@@ -411,10 +442,25 @@ if __name__ == "__main__":
     print('srtm file     =',fnameDem)
     print('Lake Point    =',LakePoint)
     print('Down dam Point=',DownDamPoint)
+    print('Max distance=',maxdist)
     print('output DEM    =',fnameOut)
     print('output Lake   =',fnameOutLake)
     #print('delta laake   =',deltaLake)
     #print('output River   =',fnameOutRiver)
+    if '+' in fnameDem:
+        print('merging dems')
+        listdems=fnameDem0.split('+')
+        fnameDemMerge=dire+'/srtmMerge.tif'
+        dems=''
+        for d in listdems:
+            if not os.path.exists(dire+os.sep+d):
+                print(' At least one dem is not existing:',dire+os.sep+d)
+            dems +=dire+os.sep+d+' '
+        cmd='gdal_merge.py  -o '+fnameDemMerge+' '+dems
+        print(cmd)
+        os.system(cmd)
+        fnameDem=fnameDemMerge
+
     if newCellSize!='' or bbox!='':
         if bbox!='':
 	        bb=' -r near -te '+bbox #,str(xmin),str(ymin),str(xmax),str(ymax)])
@@ -430,7 +476,7 @@ if __name__ == "__main__":
         print(cmd)
         os.system(cmd)
         fnameDem=fnameDemNew
-    creaLake(fnameDem,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,LakeHeight,2) 
+    creaLake(fnameDem,LakePoint,DownDamPoint,sizeKM,fnameOut,fnameOutLake,maxdist,LakeHeight,2) 
     
     quit()
 #Cingoli
