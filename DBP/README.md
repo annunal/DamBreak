@@ -10,3 +10,5 @@ The dam break event preparation includes a number of actions to be performed, su
 - running the case
 - analysis
 
+### Domain area
+The domain area contains the whole lake upstram the dam and the expected flow path downstrea.
