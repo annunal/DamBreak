@@ -59,15 +59,15 @@ This is done by clicking on the map; the point will appear on the right of the m
 At the end of the points selection do not forget to **Save** to presenrve the selcted points
 
 ### Other quantities to fill in the parameters of the calculation
-- Description:  this is a free text that can be used to specify the case
-- SRTM upload: you can use the preloaded SRTM 30m topography or use your own file for the topography
-- Resolution (m): the default resolution is 30 m but for particularly large domains, you can use a larger value. Or a smaller one if your computation can be contained. The expected computation time is shown when you save a case in the lavel on top of the save button
-- Width (m): this represents the size of the break in m
-- Depth (m): the depth is the how much of the original dam height is preserved after the break. By default this is 0, which means a complete opening of width indicated at the point above. If you specify 10 m, for example, it means that of the x m of the height of the dam 10 m are not broken. If this value is higher than the dam height, no break is performed.
-- Dam Water Elevation (m):  The elevation of the water in the lake, by definition, is assumed what is found in the topography.  You can rise this level to compute a more sever case, to simulate, for example, an overspilling from the top of the dam
-- Friction coefficient:  by definition this value is 0.015 but you can increase or reduce to perform sensitivity analyses
-- Features: please do not edit this as it represents the json feature computed for the lake area
-- Problem time (min): by default is 10h (600 min) but you can modify according to your needs
+- **Description**:  this is a free text that can be used to specify the case
+- **SRTM upload:** you can use the preloaded SRTM 30m topography or use your own file for the topography
+- **Resolution (m):** the default resolution is 30 m but for particularly large domains, you can use a larger value. Or a smaller one if your computation can be contained. The expected computation time is shown when you save a case in the lavel on top of the save button
+- **Width (m):** this represents the size of the break in m
+- **Depth (m):** the depth is the how much of the original dam height is preserved after the break. By default this is 0, which means a complete opening of width indicated at the point above. If you specify 10 m, for example, it means that of the x m of the height of the dam 10 m are not broken. If this value is higher than the dam height, no break is performed.
+- **Dam Water Elevation (m):**  The elevation of the water in the lake, by definition, is assumed what is found in the topography.  You can rise this level to compute a more sever case, to simulate, for example, an overspilling from the top of the dam
+- **Friction coefficient:**  by definition this value is 0.015 but you can increase or reduce to perform sensitivity analyses
+- **Features:** please do not edit this as it represents the json feature computed for the lake area
+- **Problem time (min):** by default is 10h (600 min) but you can modify according to your needs
 
 
 
