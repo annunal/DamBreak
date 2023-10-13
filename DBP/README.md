@@ -34,12 +34,15 @@ A list of the charactristics of the dam is apresented, obtained from the GranD d
 
 ![image](https://github.com/annunal/DamBreak/assets/10267112/567515e0-b440-46ce-af3a-34a11c5ddb10)
 
-by clicking the link "Set as new case" the data related to this dam are used to create a new dam break case.
+by clicking the link "Set as new case" the data related to this dam are used to create a new dam break case. You will import tge dam location and if available, the dam wisth.
+
 Now you can define:
 - the domain area
 - the lake area
 - the gauge points
 - the other parameters (i.e. problem time, resolution etc)
+
+  In case the dam is not prent in the list, it is always possible to start from acratch and define location; size an computational domain. in that case the lat/lon are set both at 0 value.
 
 ### Domain area
 The domain area contains the whole lake upstram the dam and the expected flow path downstream. To select the domain area you can either define the bounding box filling the fields in the form or use the map and move the Bottom left and Top right icons that define the domain area.  By default the domain is initialy set as +1 -1 degree in longitude and latitude but of course those limits are generally very exhagerated.
