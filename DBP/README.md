@@ -8,7 +8,7 @@
   * <a href="#lake-area">Lake area</a>
   * <a href="#Down Dam Point and Lake point">Down Dam Point and Lake point</a>
   * <a href="#Gauges selection">Gauges Selection</a>
-  * <a href="#Other quantities to fill in the parameters of the calculation"<Other quantities</a>
+  * <a href="#Other quantities to fill in the parameters of the calculation">Other quantities</a>
 * <a href="#Calculation execution">Calculation execution</a>
 * <a href="#Analysis Reports">Analysis Reports</a>
 
