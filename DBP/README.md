@@ -1,5 +1,12 @@
-# The Dam Break Platform description
+# The Dam Break Platform
 ![image](https://github.com/annunal/DamBreak/assets/10267112/5d93957e-f867-41aa-ae1c-f979a49bc972)
+##### Table of Contents  
+[Introduction](#Introduction)  
+[Methodology](#Methodology)
+  [Selection of the dam to analyse](#Selection of the dam to analyse)
+[Emphasis](#emphasis)  
+...snip...    
+<a name="headers"/>
 
 ## Introduction
 The <b>Dam Break PLatform (DBP)</b> is a web application that streamlines and facilitates the estimation of the consequences of Dam Break events. It relies on several scripts that were published in this gitHub site, wrapped around a web tool that facilitates the preparation and running of a new event.
