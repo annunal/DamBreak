@@ -3,14 +3,13 @@
 ##### Table of Contents  
 [Introduction](#Introduction)  
 [Methodology](#Methodology)
-  [Selection of the dam to analyse](#Selection of the dam to analyse)
-[Emphasis](#emphasis)  
-...snip...    
-<a name="headers"/>
+[Selection of the dam to analyse](#Selection of the dam to analyse)
 
+<a name="Introduction"/>
 ## Introduction
 The <b>Dam Break PLatform (DBP)</b> is a web application that streamlines and facilitates the estimation of the consequences of Dam Break events. It relies on several scripts that were published in this gitHub site, wrapped around a web tool that facilitates the preparation and running of a new event.
 
+<a name="Methodology"/>
 ## Methodology
 The dam break event preparation includes a number of actions to be performed, summarized here:
 - definition of the domain area
@@ -18,7 +17,7 @@ The dam break event preparation includes a number of actions to be performed, su
 - definition of the break size,  gauges points and other relevant parameters, such as the problem time
 - running the case
 - analysis
-
+<a name="#Selection of the dam to analyse"/>
 ### Selection of the dam to analyse
 By clicking on Dams tab you can identify the country in which the dam is located
 ![image](https://github.com/annunal/DamBreak/assets/10267112/de31a724-a58b-4529-9ff8-5b943ca88d82)
