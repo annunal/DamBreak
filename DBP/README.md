@@ -82,6 +82,19 @@ Once the conditions are correct  you can submit a calculation by pressung the **
 It is possible to follow the evolution of the calculations by selectibg the **List Calcs** tab that will show for each submitted calculation its status and other performance parameters.
 ![image](https://github.com/annunal/DamBreak/assets/10267112/40eeec39-b4d1-4437-87e7-08e64bfd910d)
 
+## Analysis Reports
+The report for each computed calculation is organized in a number of sections
+
+- Initial conditions and interactive map with overlay of Flow Depth and Arrival time
+- Population involved according to 2 models (Landscan and GHSL)
+- Impact maps with OSM and satellite images background
+- Animation (takes some time to load)
+- Timeline of the gauges
+- Gauges plots
+
+The report, saving from the browser as PDF is something like this:
+[calc_report SR.pdf](https://github.com/annunal/DamBreak/files/12892875/calc_report.SR.pdf)
+
 
 
 
