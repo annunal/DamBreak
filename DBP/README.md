@@ -35,6 +35,46 @@ Clicking and dragging the icon the new limits are prepared buyt you need to doub
 A suitable initial domain for this case could be something like this:
 ![image](https://github.com/annunal/DamBreak/assets/10267112/5cfbd0e1-ae8c-43b2-94b1-ec54072e502b)
 but if you have already performed a case, you can show the related flow depth by selecting previous calculation results.
+![image](https://github.com/annunal/DamBreak/assets/10267112/33a689f8-a32c-4966-b13e-1a46b252f800)
+It is important to limit the domain area to the minimum, as explained.
+
+### Lake area
+Once the domain area is prepared you should identify the lake area because the system will compute the location of the lake. This can be done by using the polygon tool and clicking around the lake, to form the deliniation of the lake area. This should not take so much time because it is not necessary to be procise; you just need to outline the area that you consider part of the lake.
+![image](https://github.com/annunal/DamBreak/assets/10267112/f9095aee-ebcd-45ca-985e-4950815f6d99)
+
+Once you end the drawing, press **Save**  button to save what you have delineated.
+
+### Down Dam Point and Lake point
+Those are important points because they define where the down dam area starts and where the lake starts. The system will flatten the topography (thus eliminating the dam) for a width specified by the parameters of the calculation and will  represent the opening of the dam (i.e. the break). You can either specify these two points manually or use the icons on the map by dragging and moving. Once you end moving double click on the icon to set that position.
+
+For this specificv case the  two points could be the ones indicated in the figure below. The red area is the area that will be flatten to create the break.  By default the width of the break is assumed the whole size of the break as present in the dtabase but you can modify the width by changing the value in the arameters.
+![image](https://github.com/annunal/DamBreak/assets/10267112/6bbbfcea-4c43-4179-91be-3bb02ce83cf9)
+
+### Gauges selection
+It is not mandatory but if you want to have the timelines at specific locations, you can define your own gauges. 
+
+This is done by clicking on the map; the point will appear on the right of the maop, the textbox on the right. Bt default the namingof the gauges is POINT_xxx but you can change it providing a more meaningful name. The selection of the gauge points is much easier if a previous case has been performed already because you can click on the areas affected. If you do not have any previous case, you can initialize the gauges at approximate points and in a second run make them more precise.
+![image](https://github.com/annunal/DamBreak/assets/10267112/12ccebe5-a72f-451f-9b9b-b9a6e33b72da)
+
+At the end of the points selection do not forget to **Save** to presenrve the selcted points
+
+### Other quantities to fill in the parameters of the calculation
+- Description
+- SRTM upload
+- Resolution (m)
+- Width (m)
+- Depth (m)
+- Dam Water Elevation (m)
+- Friction coefficient
+- Features
+- Problem time
+- 
+
+
+
+
+
+
 
 
 
