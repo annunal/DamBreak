@@ -14,7 +14,15 @@ The dam break event preparation includes a number of actions to be performed, su
 By clicking on Dams tab you can identify the country in which the dam is located
 ![image](https://github.com/annunal/DamBreak/assets/10267112/de31a724-a58b-4529-9ff8-5b943ca88d82)
 
-Let's assume Italy.  The identify the dam for which you want to perform the analysis, let's suppose Santa Rosalia in Sicily
+Let's assume Italy.  The identify the dam for which you want to perform the analysis, let's suppose Santa Rosalia in Sicily  by clicking the specific dam icon
+![image](https://github.com/annunal/DamBreak/assets/10267112/88c9d26e-f347-4585-a589-7b6fb9a004cf)
+A list of the charactristics of the dam is apresented, obtained from the GranD dam database (*** reference)
+
+![image](https://github.com/annunal/DamBreak/assets/10267112/567515e0-b440-46ce-af3a-34a11c5ddb10)
+
+by clicking the link "Set as new case" the data related to this dam are used to create a new dam break case
+
+
 
 
 ### Domain area
