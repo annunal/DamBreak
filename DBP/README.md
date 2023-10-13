@@ -71,6 +71,19 @@ At the end of the points selection do not forget to **Save** to presenrve the se
 - **Features:** please do not edit this as it represents the json feature computed for the lake area
 - **Problem time (min):** by default is 10h (600 min) but you can modify according to your needs
 
+- Once you have compiled the quantities you want to change,  remember to press **Save** button. It will show the expected CPU time and domain extent size.
+  ![image](https://github.com/annunal/DamBreak/assets/10267112/346fe041-3139-41dc-bffd-5eb800f8fe49)
+  
+
+### Calculation execution
+Once the conditions are correct  you can submit a calculation by pressung the **Execute** button
+![image](https://github.com/annunal/DamBreak/assets/10267112/0dd6aa76-f708-441b-a833-a20a8e02878d)
+
+It is possible to follow the evolution of the calculations by selectibg the **List Calcs** tab that will show for each submitted calculation its status and other performance parameters.
+![image](https://github.com/annunal/DamBreak/assets/10267112/40eeec39-b4d1-4437-87e7-08e64bfd910d)
+
+
+
 
 
 
