@@ -3,8 +3,8 @@
 ##### Table of Contents  
 * <a href="#Introduction">Introduction</a>
 * <a href="#Methodology">Methodology</a>
-* <a hre="#Selection of the44 dam to analyse</a>
-* <a hre="#domain-area">Domain area</a>
+* <a href="#Selection of the44 dam to analyse</a>
+* <a href="#domain-area">Domain area</a>
 
 
 ## Introduction
