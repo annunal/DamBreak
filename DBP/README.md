@@ -20,11 +20,21 @@ A list of the charactristics of the dam is apresented, obtained from the GranD d
 
 ![image](https://github.com/annunal/DamBreak/assets/10267112/567515e0-b440-46ce-af3a-34a11c5ddb10)
 
-by clicking the link "Set as new case" the data related to this dam are used to create a new dam break case
-
-
-
+by clicking the link "Set as new case" the data related to this dam are used to create a new dam break case.
+Now you can define:
+- the domain area
+- the lake area
+- the gauge points
+- the other parameters (i.e. problem time, resolution etc)
 
 ### Domain area
-The domain area contains the whole lake upstram the dam and the expected flow path downstream. To select the domain area you can either define the bounding box filling the fields in the form or use the map and move the Bottom left and Top right icons that define the domain area
+The domain area contains the whole lake upstram the dam and the expected flow path downstream. To select the domain area you can either define the bounding box filling the fields in the form or use the map and move the Bottom left and Top right icons that define the domain area.  By default the domain is initialy set as +1 -1 degree in longitude and latitude but of course those limits are generally very exhagerated.
+![image](https://github.com/annunal/DamBreak/assets/10267112/08b1fef9-ee85-4c20-bf49-6046f4a7ab82)
+Using the mouse you should reduce the limits to a more reasonobale area,  as little as possible to contain the computational effort but large enough to cintain the flow disharge for the time tyou want to analyse.
+Clicking and dragging the icon the new limits are prepared buyt you need to double click the icons (one at time) to fix the limits.
+A suitable initial domain for this case could be something like this:
+![image](https://github.com/annunal/DamBreak/assets/10267112/5cfbd0e1-ae8c-43b2-94b1-ec54072e502b)
+but if you have already performed a case, you can show the related flow depth by selecting previous calculation results.
+
+
 
