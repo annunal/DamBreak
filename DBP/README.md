@@ -3,10 +3,10 @@
 ##### Table of Contents  
 * <a href="#Introduction">Introduction</a>
 * <a href="#Methodology">Methodology</a>
-* <a href="#Selection of the dam to analyse">Selection of the dam to analyse</a>
-** <a href="#domain-area">Domain area</a>
-** <a href="#Lake area">Lake area</a>
-
+* <a href="#selection-of-the-dam-to-analyse">Selection of the dam to analyse</a>
+   <a href="#domain-area">Domain area</a>
+* <a href="#Lake area">Lake area</a>
+#selection-of-the-dam-to-analyse
 
 ## Introduction
 The <b>Dam Break PLatform (DBP)</b> is a web application that streamlines and facilitates the estimation of the consequences of Dam Break events. It relies on several scripts that were published in this gitHub site, wrapped around a web tool that facilitates the preparation and running of a new event.
